@@ -25,7 +25,7 @@ if (/.*\..*\./.test(cert1CN)) {
 if (!(await verifyToken())) process.exit(1);
 const zone = await getZone(domain);
 const dns = await listDNSRecords(zone);
-const tlsa = dns.filter((d) => d.type === 'TLSA') as CFListDNSRecordEntryTLSA[];
+const tlsa = dns.filter((d) => d.type === 'TLSA' && d.name === `_25._tcp.${cert1CN}`) as CFListDNSRecordEntryTLSA[];
 console.log(tlsa);
 
 await unlink('./cert1.pem');

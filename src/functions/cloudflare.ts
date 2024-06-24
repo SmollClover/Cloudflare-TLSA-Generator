@@ -1,4 +1,13 @@
-import type { CFListDNSRecords, CFListZoneEntry, CFListZones, CFResponse, CFVerifyToken } from '../interfaces/cloudflare';
+import ShortUniqueId from 'short-unique-id';
+import type {
+    CFDNSRecordTLSAPayload,
+    CFListDNSRecordEntryTLSA,
+    CFListDNSRecords,
+    CFListZoneEntry,
+    CFListZones,
+    CFResponse,
+    CFVerifyToken,
+} from '../interfaces/cloudflare';
 
 const BASE = 'https://api.cloudflare.com/client/v4';
 const HEADERS = {
@@ -62,4 +71,63 @@ export async function listDNSRecords(zone: CFListZoneEntry) {
     const parsed = await parseResponse<CFListDNSRecords>(response);
 
     return parsed.result;
+}
+
+export async function createTLSARecord(
+    zone: CFListZoneEntry,
+    name: string,
+    usage: number,
+    selector: number,
+    matching_type: number,
+    data: string,
+) {
+    const { randomUUID } = new ShortUniqueId({ length: 32 });
+
+    const payload: CFDNSRecordTLSAPayload = {
+        data: {
+            certificate: data,
+            matching_type: matching_type,
+            selector: selector,
+            usage: usage,
+        },
+        name: name,
+        type: 'TLSA',
+        id: randomUUID(),
+        zone_id: zone.id,
+    };
+
+    const response = await fetch(`${BASE}/zones/${zone.id}/dns_records`, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify(payload),
+    });
+
+    await parseResponse(response);
+}
+
+export async function updateTLSARecord(zone: CFListZoneEntry, record: CFListDNSRecordEntryTLSA, data: string) {
+    const payload: CFDNSRecordTLSAPayload = {
+        data: {
+            certificate: data,
+            matching_type: record.data.matching_type,
+            selector: record.data.selector,
+            usage: record.data.usage,
+        },
+        name: record.name,
+        type: 'TLSA',
+        id: record.id,
+    };
+
+    if (record.comment) payload.comment = record.comment;
+    if (record.tags) payload.tags = record.tags;
+    if (record.ttl) payload.ttl = record.ttl;
+    if (record.zone_id) payload.zone_id = record.zone_id;
+
+    const response = await fetch(`${BASE}/zones/${zone.id}/dns_records/${record.id}`, {
+        method: 'PATCH',
+        headers: HEADERS,
+        body: JSON.stringify(payload),
+    });
+
+    await parseResponse(response);
 }

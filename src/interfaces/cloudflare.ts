@@ -91,3 +91,19 @@ export interface CFListDNSRecordEntryTLSA extends CFListDNSRecordEntry {
         usage: number;
     };
 }
+
+export interface CFDNSRecordTLSAPayload {
+    data: {
+        certificate: string;
+        matching_type: number;
+        selector: number;
+        usage: number;
+    };
+    name: string;
+    type: 'TLSA';
+    comment?: string;
+    id: string;
+    tags?: string[];
+    ttl?: number;
+    zone_id?: string;
+}

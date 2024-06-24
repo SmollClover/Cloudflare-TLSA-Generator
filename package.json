@@ -12,5 +12,8 @@
         "check": "biome check .",
         "fix": "biome check . --write"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "short-unique-id": "^5.2.0"
+    }
 }
