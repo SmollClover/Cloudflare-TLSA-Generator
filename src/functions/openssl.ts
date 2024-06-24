@@ -53,5 +53,5 @@ export async function genTLSA(usage: number, selector: number, matching_type: nu
         }
     }
 
-    return data;
+    return data.replaceAll('\n', '');
 }
