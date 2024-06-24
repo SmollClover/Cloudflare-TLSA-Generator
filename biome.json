@@ -1,0 +1,26 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.1/schema.json",
+	"files": {
+		"ignore": ["out/**/*", "test_files/**/*"]
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"indentWidth": 4,
+		"indentStyle": "tab",
+		"lineWidth": 128
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single"
+		}
+	}
+}
