@@ -1,16 +1,16 @@
 {
-	"name": "cloudflare-tlsa-generator",
-	"module": "src/index.ts",
-	"devDependencies": {
-		"@biomejs/biome": "1.8.2",
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5.0.0"
-	},
-	"scripts": {
-		"check": "biome check .",
-		"fix": "biome check . --write"
-	},
-	"type": "module"
+    "name": "cloudflare-tlsa-generator",
+    "module": "src/index.ts",
+    "devDependencies": {
+        "@biomejs/biome": "1.8.2",
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "scripts": {
+        "check": "biome check .",
+        "fix": "biome check . --write"
+    },
+    "type": "module"
 }
