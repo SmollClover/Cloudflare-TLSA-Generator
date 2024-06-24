@@ -10,7 +10,7 @@ RUN bun i --frozen-lockfile
 COPY src ./src/
 RUN bun build.ts
 
-FROM oven/bun:1.1.16-slim
+FROM oven/bun:1.1.16-alpine
 
 WORKDIR /app
 
