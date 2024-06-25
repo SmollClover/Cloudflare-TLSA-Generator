@@ -1,4 +1,6 @@
-FROM oven/bun:1.1.16-alpine AS builder
+ARG BUN_VERSION="1.1.16-alpine"
+
+FROM oven/bun:$BUN_VERSION AS builder
 
 WORKDIR /app
 
@@ -10,7 +12,7 @@ RUN bun i --frozen-lockfile
 COPY src ./src/
 RUN bun build.ts
 
-FROM oven/bun:1.1.16-alpine
+FROM oven/bun:$BUN_VERSION
 
 WORKDIR /app
 
