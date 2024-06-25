@@ -35,17 +35,18 @@ export async function main() {
 
     await splitCert();
 
-    const cert1CN = Bun.env.COMMON_NAME ?? (await getCN('./cert1.pem'));
+    const CN = Bun.env.COMMON_NAME ?? (await getCN('./cert1.pem'));
 
-    let domain = cert1CN;
+    let domain = CN;
     if (Bun.env.DOMAIN) {
         domain = Bun.env.DOMAIN;
-    } else if (/.*\..*\./.test(cert1CN)) {
-        const seperated = cert1CN.split('.').reverse();
+    } else if (/.*\..*\./.test(CN)) {
+        const seperated = CN.split('.').reverse();
         domain = `${seperated[1]}.${seperated[0]}`;
     }
 
-    const name = Bun.env.TLSA_NAME ?? `_25._tcp.${cert1CN}`;
+    const prefix = Bun.env.TLSA_PREFIX ?? '_25._tcp';
+    const name = `${prefix}.${CN}`;
 
     if (!(await verifyToken())) process.exit(1);
     const zone = Bun.env.ZONE_ID ? await getZoneByID(Bun.env.ZONE_ID) : await getZoneByName(domain);
