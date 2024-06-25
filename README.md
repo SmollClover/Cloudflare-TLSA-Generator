@@ -18,3 +18,7 @@ Automatically generate and update TLSA records from a `.pem` certificate on Clou
 | COMMON_NAME  | OPTIONAL | read from certificate    | mail.example.com                         | Common name used for the TLSA record                                             |
 | DOMAIN       | OPTIONAL | derived from COMMON_NAME | example.com                              | Domain used to get Cloudflare Zone                                               |
 | TLSA_PREFIX  | OPTIONAL | _25._tcp                 | _25._tcp                                 | Prefix used for the TLSA record name                                             |
+
+### Example
+
+**Example of compose here**
