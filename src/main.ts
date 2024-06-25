@@ -1,9 +1,9 @@
-import { cleanCert, splitCert } from './functions/certificate';
-import { createTLSARecord, getZone, listDNSRecords, updateTLSARecord, verifyToken } from './functions/cloudflare';
-import { log } from './functions/console';
-import { genTLSA, getCN } from './functions/openssl';
+import { cleanCert, splitCert } from './function/certificate';
+import { createTLSARecord, getZone, listDNSRecords, updateTLSARecord, verifyToken } from './function/cloudflare';
+import { log } from './function/console';
+import { genTLSA, getCN } from './function/openssl';
 
-import type { CFListDNSRecordEntryTLSA } from './interfaces/cloudflare';
+import type { CFListDNSRecordEntryTLSA } from './interface/cloudflare';
 
 const STATE = {
     IDLE: 0,

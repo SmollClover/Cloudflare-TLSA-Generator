@@ -1,5 +1,5 @@
 import { watch } from 'node:fs';
-import { log } from './functions/console';
+import { log } from './function/console';
 import { main } from './main';
 
 if (!Bun.env.CF_API_TOKEN) throw new Error('Environment variable CLOUDFLARE_API_TOKEN is required');

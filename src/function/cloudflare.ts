@@ -7,7 +7,7 @@ import type {
     CFListZones,
     CFResponse,
     CFVerifyToken,
-} from '../interfaces/cloudflare';
+} from '../interface/cloudflare';
 
 const BASE = 'https://api.cloudflare.com/client/v4';
 const HEADERS = {
