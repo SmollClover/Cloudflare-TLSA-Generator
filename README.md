@@ -14,7 +14,7 @@ Automatically generate and update TLSA records from a `.pem` certificate on Clou
 | ------------ | -------- | ------------------------ | ---------------------------------------- | -------------------------------------------------------------------------------- |
 | CERT         | REQUIRED | unset                    | /data/certs/mail.example.com/cert.pem    | The path to the certificate                                                      |
 | CF_API_TOKEN | REQUIRED | unset                    | XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX | A Cloudflare API Token with access to the Zone and to read and write DNS records |
-| ZONE_ID      | OVERRIDE | unset                    | XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX         | Explicit ID of Cloudflare Zone used instead of using the Domain                  |
-| COMMON_NAME  | OVERRIDE | read from certificate    | mail.example.com                         | Common name used for the TLSA record                                             |
-| DOMAIN       | OVERRIDE | derived from COMMON_NAME | example.com                              | Domain used to get Cloudflare Zone                                               |
-| TLSA_PREFIX  | OVERRIDE | _25._tcp                 | _25._tcp                                 | Prefix used for the TLSA record name                                             |
+| ZONE_ID      | OPTIONAL | unset                    | XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX         | Explicit ID of Cloudflare Zone used instead of using the Domain                  |
+| COMMON_NAME  | OPTIONAL | read from certificate    | mail.example.com                         | Common name used for the TLSA record                                             |
+| DOMAIN       | OPTIONAL | derived from COMMON_NAME | example.com                              | Domain used to get Cloudflare Zone                                               |
+| TLSA_PREFIX  | OPTIONAL | _25._tcp                 | _25._tcp                                 | Prefix used for the TLSA record name                                             |
