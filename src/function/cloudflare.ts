@@ -50,16 +50,33 @@ export async function listZones() {
     return parsed.result;
 }
 
-export async function getZone(name: string) {
+export async function getZoneByName(name: string) {
     const zones = await listZones();
 
     const zone = zones.find((z) => z.name === name);
-    if (!zone) throw new Error('Could not find Zone on Cloudflare. Please make sure we have permissions to view this Zone');
+    if (!zone)
+        throw new Error(`Could not find Zone ${name} on Cloudflare. Please make sure we have permissions to view this Zone`);
 
-    if (!zone.permissions.includes('#dns_records:read')) throw new Error('Missing permission to read DNS records on Zone');
-    if (!zone.permissions.includes('#dns_records:edit')) throw new Error('Missing permission to edit DNS records on Zone');
+    await zoneDNSPermissions(zone);
 
     return zone;
+}
+
+export async function getZoneByID(id: string) {
+    const zones = await listZones();
+
+    const zone = zones.find((z) => z.id === id);
+    if (!zone)
+        throw new Error(`Could not find Zone ${id} on Cloudflare. Please make sure we have permissions to view this Zone`);
+
+    await zoneDNSPermissions(zone);
+
+    return zone;
+}
+
+async function zoneDNSPermissions(zone: CFListZoneEntry) {
+    if (!zone.permissions.includes('#dns_records:read')) throw new Error('Missing permission to read DNS records on Zone');
+    if (!zone.permissions.includes('#dns_records:edit')) throw new Error('Missing permission to edit DNS records on Zone');
 }
 
 export async function listDNSRecords(zone: CFListZoneEntry) {

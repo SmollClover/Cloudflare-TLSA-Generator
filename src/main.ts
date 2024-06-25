@@ -1,5 +1,12 @@
 import { cleanCert, splitCert } from './function/certificate';
-import { createTLSARecord, getZone, listDNSRecords, updateTLSARecord, verifyToken } from './function/cloudflare';
+import {
+    createTLSARecord,
+    getZoneByID,
+    getZoneByName,
+    listDNSRecords,
+    updateTLSARecord,
+    verifyToken,
+} from './function/cloudflare';
 import { log } from './function/console';
 import { genTLSA, getCN } from './function/openssl';
 
@@ -28,18 +35,20 @@ export async function main() {
 
     await splitCert();
 
-    const cert1CN = await getCN('./cert1.pem');
+    const cert1CN = Bun.env.COMMON_NAME ?? (await getCN('./cert1.pem'));
 
     let domain = cert1CN;
-    if (/.*\..*\./.test(cert1CN)) {
+    if (Bun.env.DOMAIN) {
+        domain = Bun.env.DOMAIN;
+    } else if (/.*\..*\./.test(cert1CN)) {
         const seperated = cert1CN.split('.').reverse();
         domain = `${seperated[1]}.${seperated[0]}`;
     }
 
-    const name = `_25._tcp.${cert1CN}`;
+    const name = Bun.env.TLSA_NAME ?? `_25._tcp.${cert1CN}`;
 
     if (!(await verifyToken())) process.exit(1);
-    const zone = await getZone(domain);
+    const zone = Bun.env.ZONE_ID ? await getZoneByID(Bun.env.ZONE_ID) : await getZoneByName(domain);
     const dns = await listDNSRecords(zone);
     const records = dns.filter((d) => d.type === 'TLSA' && d.name === name) as CFListDNSRecordEntryTLSA[];
 
