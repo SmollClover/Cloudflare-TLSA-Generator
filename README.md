@@ -19,6 +19,15 @@ Automatically generate and update TLSA records from a `.pem` certificate on Clou
 | DOMAIN       | OPTIONAL | derived from COMMON_NAME | example.com                              | Domain used to get Cloudflare Zone                                               |
 | TLSA_PREFIX  | OPTIONAL | _25._tcp                 | _25._tcp                                 | Prefix used for the TLSA record name                                             |
 
-### Example
+### Basic Example
 
-**Example of compose here**
+```yaml
+services:
+  cloudflare-tlsa:
+    image: smollclover/cloudflare-tlsa-generator:latest
+    volumes:
+        - certs:/data/certs:ro
+    environment:
+        - CERT=/data/certs/mail.example.com/cert.pem
+        - CF_API_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
