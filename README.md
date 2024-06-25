@@ -1,6 +1,8 @@
 # Cloudflare TLSA Generator
 
 [![GitHub license](https://img.shields.io/github/license/SmollClover/Cloudflare-TLSA-Generator)](https://github.com/SmollClover/Cloudflare-TLSA-Generator/blob/main/LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/smollclover/cloudflare-tlsa-generator?logo=docker&style=flat)](https://hub.docker.com/r/smollclover/cloudflare-tlsa-generator)
+![Docker Image Size](https://img.shields.io/docker/image-size/smollclover/cloudflare-tlsa-generator/latest?label=image%20size%20%28latest%29&logo=docker)
 
 Automatically generate and update TLSA records from a `.pem` certificate on Cloudflare.
 
