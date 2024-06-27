@@ -2,8 +2,6 @@ ARG BUN_VERSION="1.1.16-alpine"
 
 FROM oven/bun:$BUN_VERSION AS builder
 
-WORKDIR /app
-
 COPY build.ts ./
 
 COPY package.json bun.lockb ./
@@ -14,12 +12,14 @@ RUN bun build.ts
 
 FROM oven/bun:$BUN_VERSION
 
-WORKDIR /app
+RUN apk upgrade --update-cache --available && apk add openssl
+RUN rm -rf /var/cache/apk/*
 
-RUN apk upgrade --update-cache --available && \
-    apk add openssl && \
-    rm -rf /var/cache/apk/*
+RUN chown -R bun:bun /home/bun/app
+RUN chmod 755 /home/bun/app
+    
+USER bun
 
-COPY --from=builder /app/out/* ./
+COPY --from=builder /home/bun/app/out/* ./
 
 CMD ["bun", "run", "index.js"]
