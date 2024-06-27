@@ -4,9 +4,8 @@ console.log(
             entrypoints: ['src/index.ts'],
             outdir: './out',
             minify: true,
-            splitting: true,
             target: 'bun',
-            sourcemap: 'inline',
+            sourcemap: 'linked',
         })
     ).logs.join('\n'),
 );
