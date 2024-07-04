@@ -1,4 +1,4 @@
-ARG BUN_VERSION="1.1.17-alpine"
+ARG BUN_VERSION="1.1.18-alpine"
 
 FROM oven/bun:$BUN_VERSION AS builder
 
