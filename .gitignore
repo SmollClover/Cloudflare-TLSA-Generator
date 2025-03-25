@@ -176,3 +176,5 @@ dist
 
 # Certificates
 *.pem
+
+dev/
