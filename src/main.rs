@@ -1,7 +1,7 @@
 #[macro_use] extern crate log;
 
 use std::{fs, process::exit};
-use clap::{error, Parser};
+use clap::Parser;
 use dotenv::dotenv;
 use log::LevelFilter;
 use openssl::{nid::Nid, x509::X509};
