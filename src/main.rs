@@ -5,7 +5,7 @@ use clap::Parser;
 use dotenv::dotenv;
 use log::LevelFilter;
 use openssl::{nid::Nid, x509::X509};
-use cloudflare::{endpoints::zones::zone::ListZonesParams, framework::{auth::Credentials::UserAuthToken, client::{blocking_api::HttpApiClient, ClientConfig}, Environment}};
+use cloudflare::{endpoints::zones::zone::{self, ListZonesParams, Zone}, framework::{auth::Credentials::UserAuthToken, client::{blocking_api::HttpApiClient, ClientConfig}, Environment}};
 use simplelog::{format_description, ColorChoice, ConfigBuilder, TermLogger, TerminalMode};
 
 mod tlsa;
@@ -111,7 +111,30 @@ fn main() {
     };
 
     cf::verify_token(&api_client);
-    cf::check_zone_permission(cf::list_zones(&api_client, ListZonesParams::default()).result.first().unwrap());
+
+    let zone: Zone;
+    if args.clone().zone.is_some() {
+        zone = cf::get_zone(&api_client, &args.zone.unwrap()).result;
+    } else {
+        let mut zone_search = ListZonesParams::default();
+        zone_search.name = Some(domain.clone());
+        let zone_result = cf::list_zones(&api_client, zone_search);
+        zone = match zone_result.result.first() {
+            Some(z) => {
+                cf::get_zone(&api_client, &z.id).result
+            },
+            None => {
+                error!("Couldn't find any zone with domain: {}", domain);
+                exit(1);
+            }
+        };
+    }
+
+    cf::check_zone_permission(&zone);
+    info!("Using Zone: {}", zone.name);
+
+    let dns_records = cf::list_dns_records(&api_client, &zone);
+    dbg!(dns_records);
 
     // println!("2 1 1 {}", tlsa::generate(&cert_ca, tlsa::Selector::PublicKey, tlsa::MatchingType::SHA256));
     // println!("2 1 2 {}", tlsa::generate(&cert_ca, tlsa::Selector::PublicKey, tlsa::MatchingType::SHA512));

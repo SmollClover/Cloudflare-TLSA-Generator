@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use cloudflare::{endpoints::{account::user::GetUserTokenStatus, zones::zone::{ListZones, ListZonesParams, Zone}}, framework::{client::blocking_api::HttpApiClient, response::ApiSuccess}};
+use cloudflare::{endpoints::{account::user::GetUserTokenStatus, dns::dns::{DnsRecord, ListDnsRecords, ListDnsRecordsParams}, zones::zone::{ListZones, ListZonesParams, Zone, ZoneDetails}}, framework::{client::blocking_api::HttpApiClient, response::ApiSuccess}};
 
 pub fn verify_token(api_client: &HttpApiClient) {
     debug!("Verifying Token validity");
@@ -36,6 +36,20 @@ pub fn list_zones(api_client: &HttpApiClient, params: ListZonesParams) -> ApiSuc
     }
 }
 
+pub fn get_zone(api_client: &HttpApiClient, identifier: &str) -> ApiSuccess<Zone> {
+    debug!("Querying Zone by identifier: {}", identifier);
+
+    let endpoint = ZoneDetails { identifier };
+
+    match api_client.request(&endpoint) {
+        Ok(response) => response,
+        Err(e) => {
+            error!("Error getting Zone: {}", e);
+            exit(1);
+        },
+    }
+}
+
 pub fn check_zone_permission(zone: &Zone) {
     debug!("Checking permissions for zone: {}", zone.name);
 
@@ -47,5 +61,19 @@ pub fn check_zone_permission(zone: &Zone) {
     if !zone.permissions.contains(&"#dns_records:edit".to_owned()) {
         error!("Missing permission to edit DNS records for zone: {}", zone.name);
         exit(1);
+    }
+}
+
+pub fn list_dns_records(api_client: &HttpApiClient, zone: &Zone) -> ApiSuccess<Vec<DnsRecord>> {
+    debug!("Querying DNS records for zone: {}", zone.id);
+
+    let endpoint = ListDnsRecords { zone_identifier: &zone.id, params: ListDnsRecordsParams::default() };
+
+    match api_client.request(&endpoint) {
+        Ok(response) => response,
+        Err(e) => {
+            error!("Error listing all DNS Records: {}", e);
+            exit(1);
+        },
     }
 }
