@@ -9,11 +9,11 @@ lto = true
 opt-level = "z"
 
 [dependencies]
-clap = { version = "4.5.34", features = ["derive", "env", "wrap_help"] }
+clap = { version = "4.5.37", features = ["derive", "env", "wrap_help"] }
 cloudflare = { version = "0.14.0", features = ["blocking"] }
 dotenv = { version = "0.15.0", features = ["clap", "cli"] }
 hex = "0.4.3"
 log = "0.4.27"
-openssl = { version = "0.10.71", features = ["vendored"] }
+openssl = { version = "0.10.72", features = ["vendored"] }
 simplelog = "0.12.2"
 time = "0.3.41"
